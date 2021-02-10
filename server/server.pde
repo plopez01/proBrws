@@ -2,17 +2,22 @@ import processing.net.*;
 
 Server server;
 
-String[] buffer;
+byte[] buffer;
 
 void setup() {
-    size (640, 480);
-    background(0);
-    
-    server = new Server(this, 5204);
+  size (640, 480);
+  background(0);
+  
+  server = new Server(this, 5204);
+  
+  buffer = loadBytes("./index.pml");
+}
 
-    buffer = loadStrings("./index.pml");
+void draw() {
+  
 }
 
 void serverEvent(Server extServer, Client extClient){
-    server.write(buffer);
+  println("A new client connected!");
+  server.write(buffer);
 }

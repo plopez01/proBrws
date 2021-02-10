@@ -18,7 +18,7 @@ void setup(){
   size(640, 480);
   background(255);
 
-  navBar.text = "";
+  navBar.text = "file://./file.pml";
 }
 
 void draw(){
@@ -35,8 +35,14 @@ void search(String text){
   }else{
     client = new Client(this, text, 5204);
     if(client.available() > 0){
-      buffer = client.readString();
-      println(buffer);
+      byte[] bBuffer = new byte[1200];
+      client.readBytes(bBuffer);
+      String decodedData = "";
+      for(int i = 0; i < bBuffer.length; i++){
+        decodedData += char(bBuffer[i]);
+      }
+      buffer = decodedData.split("\n");
+      println(decodedData);
     }
   }
   render = true;
