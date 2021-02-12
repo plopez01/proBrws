@@ -1,7 +1,5 @@
 import processing.net.*;
 
-Client client;
-
 String[] buffer;
 
 TextBox navBar = new TextBox(1, 0, 25, color(0), color(255));
@@ -18,7 +16,7 @@ void setup(){
   size(640, 480);
   background(255);
 
-  navBar.text = "file://./file.pml";
+  navBar.text = "localhost";
 }
 
 void draw(){
@@ -33,17 +31,25 @@ void search(String text){
   if(localSearch.length == 2){
     buffer = loadStrings(localSearch[1]);
   }else{
-    client = new Client(this, text, 5204);
+    Client client = new Client(this, text, 5204);
     if(client.available() > 0){
-      byte[] bBuffer = new byte[1200];
+      //Get content len
+      int len = client.read();
+      byte[] bBuffer = new byte[len];
+      //TODO: Implement rsc data
+      //Got len, ask for data
+      client.write(0);
+      while(client.available() != len); // Block thread until we got all the data
       client.readBytes(bBuffer);
       String decodedData = "";
-      for(int i = 0; i < bBuffer.length; i++){
+      for(int i = 0; i < len; i++){
         decodedData += char(bBuffer[i]);
       }
-      buffer = decodedData.split("\n");
       println(decodedData);
+      buffer = decodedData.split("\n");
     }
+    client.stop();
+    while(client.active()); // Block thread until the client has shutdown
   }
   render = true;
 }
