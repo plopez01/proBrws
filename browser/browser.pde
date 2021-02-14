@@ -32,24 +32,21 @@ void search(String text){
     buffer = loadStrings(localSearch[1]);
   }else{
     Client client = new Client(this, text, 5204);
-    if(client.available() > 0){
-      //Get content len
-      int len = client.read();
-      byte[] bBuffer = new byte[len];
-      //TODO: Implement rsc data
-      //Got len, ask for data
-      client.write(0);
-      while(client.available() != len); // Block thread until we got all the data
-      client.readBytes(bBuffer);
-      String decodedData = "";
-      for(int i = 0; i < len; i++){
-        decodedData += char(bBuffer[i]);
-      }
-      println(decodedData);
-      buffer = decodedData.split("\n");
+    while(client.available() == 0); // Block thread until we got all the data
+    //Get content len
+    int len = client.read();
+    byte[] bBuffer = new byte[len];
+    //TODO: Implement rsc data
+    //Got len, ask for data
+    client.write(0);
+    while(client.available() != len); // Block thread until we got all the data
+    client.readBytes(bBuffer);
+    String decodedData = "";
+    for(int i = 0; i < len; i++){
+      decodedData += char(bBuffer[i]);
     }
+    buffer = decodedData.split("\n");
     client.stop();
-    while(client.active()); // Block thread until the client has shutdown
   }
   render = true;
 }
