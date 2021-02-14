@@ -31,22 +31,35 @@ void search(String text){
   if(localSearch.length == 2){
     buffer = loadStrings(localSearch[1]);
   }else{
-    Client client = new Client(this, text, 5204);
-    while(client.available() == 0); // Block thread until we got all the data
-    //Get content len
-    int len = client.read();
-    byte[] bBuffer = new byte[len];
-    //TODO: Implement rsc data
-    //Got len, ask for data
-    client.write(0);
-    while(client.available() != len); // Block thread until we got all the data
-    client.readBytes(bBuffer);
-    String decodedData = "";
-    for(int i = 0; i < len; i++){
-      decodedData += char(bBuffer[i]);
+    String[] cacheRead = loadStrings("./cache/"+text+"/index.pml");
+    if(cacheRead != null){
+       buffer = cacheRead;
+    }else{
+      Client client = new Client(this, text, 5204);
+      while(client.available() == 0); // Block thread until we got all the data
+      //Get content len
+      int len = client.read();
+      byte[] bBuffer = new byte[len];
+      //TODO: Implement rsc data
+      //Got len, ask for data
+      client.write(0);
+      while(client.available() != len); // Block thread until we got all the data
+      client.readBytes(bBuffer);
+      String decodedData = "";
+      for(int i = 0; i < len; i++){
+        decodedData += char(bBuffer[i]);
+      }
+      buffer = decodedData.split("\n");
+      
+      //Save page to the cache
+      PrintWriter cacheStream = createWriter("./cache/"+text+"/index.pml");
+      cacheStream.print(buffer);
+      cacheStream.flush();
+      cacheStream.close();
+      
+      //Stop connection
+      client.stop();
     }
-    buffer = decodedData.split("\n");
-    client.stop();
   }
   render = true;
 }
