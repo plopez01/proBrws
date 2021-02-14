@@ -1,4 +1,7 @@
 import processing.net.*;
+import java.nio.ByteBuffer;
+
+boolean cache = false;
 
 String[] buffer;
 
@@ -32,19 +35,17 @@ void search(String text){
     buffer = loadStrings(localSearch[1]);
   }else{
     String[] cacheRead = loadStrings("./cache/"+text+"/index.pml");
-    if(cacheRead != null){
+    if(cacheRead != null && cache){
        buffer = cacheRead;
     }else{
       Client client = new Client(this, text, 5204);
       while(client.available() == 0); // Block thread until we got all the data
       //Get content len
-      int len = client.read();
+      ByteBuffer bb = ByteBuffer.wrap(client.readBytes());
+      int len = bb.getInt();
       byte[] bBuffer = new byte[len];
       //TODO: Implement rsc data
-      //Got len, ask for data
-      client.write(0);
-      while(client.available() != len); // Block thread until we got all the data
-      client.readBytes(bBuffer);
+      bb.get(bBuffer);
       String decodedData = "";
       for(int i = 0; i < len; i++){
         decodedData += char(bBuffer[i]);
@@ -53,7 +54,7 @@ void search(String text){
       
       //Save page to the cache
       PrintWriter cacheStream = createWriter("./cache/"+text+"/index.pml");
-      cacheStream.print(buffer);
+      cacheStream.print(decodedData);
       cacheStream.flush();
       cacheStream.close();
       
