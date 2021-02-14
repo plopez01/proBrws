@@ -36,7 +36,7 @@ void draw() {
 
 void blockUntilDone(Client client) {
   netData = client.available();
-  delay(50);
+  delay(100);
   if (netData != client.available()) {
     blockUntilDone(client);
   }
