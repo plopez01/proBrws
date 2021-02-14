@@ -7,7 +7,7 @@ ByteBuffer buffer;
 
 int imgCount = 0;
 
-byte[][] imgBuffer;
+PImage[] images;
 
 void setup() {
   size (640, 480);
@@ -18,15 +18,17 @@ void setup() {
   
   buffer = ByteBuffer.allocate(bytes.length + 4);
   buffer.putInt(bytes.length);
-  buffer.put(buffer);
+  buffer.put(bytes);
   
-  File imgFolder = dataFile("./img");
+  File imgFolder = dataFile(sketchPath("/img"));
+  String[] imgNames = imgFolder.list();
+  imgCount = imgNames.length;
   
-  String[] names = imgFolder.list();
-  imgCount = names.length;
+  images = new PImage[imgCount];
+  
   
   for(int i = 0; i < imgCount; i++){
-    imgBuffer[i] = serialize(loadImage("./img/"+names[i]));
+    images[i] = loadImage("./img/"+imgNames[i]);
   }
 }
 
@@ -35,18 +37,6 @@ void draw() {}
 void serverEvent(Server extServer, Client extClient){
   println("A new client connected! Sending data length...");
   server.write(buffer.array());
-}
-
-void clientEvent(Client someClient) {
-  int dataIn = someClient.read();
-  switch(dataIn){
-    case 0:
-      server.write(imgCount);
-      break;
-  }
-  if(dataIn > 1){
-    server.write(imgBuffer[dataIn]);
-  }
 }
 
 byte[] serialize(PImage img) {

@@ -9,6 +9,8 @@ TextBox navBar = new TextBox(1, 0, 25, color(0), color(255));
 
 boolean render = false;
 
+int netData = 0;
+
 int HEIGHT = 50;
 
 int MARGINX = 2;
@@ -28,6 +30,13 @@ void draw(){
   navBar.render();
 }
 
+void blockUntilDone(Client client){
+  netData = client.available();
+  delay(10);
+  if(netData != client.available()){
+    blockUntilDone(client);
+  }
+}
 
 void search(String text){
   String[] localSearch = text.split("file://");
@@ -39,7 +48,7 @@ void search(String text){
        buffer = cacheRead;
     }else{
       Client client = new Client(this, text, 5204);
-      while(client.available() == 0); // Block thread until we got all the data
+      blockUntilDone(client); // Block thread until we got all the data
       //Get content len
       ByteBuffer bb = ByteBuffer.wrap(client.readBytes());
       int len = bb.getInt();
