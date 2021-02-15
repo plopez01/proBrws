@@ -4,11 +4,11 @@ This is a custom Browser and Web Server with it's own dedicated markup language 
 ## Browser Usage
 The browser is really simple, you just have a textbox where you can type the adress of the page.
 
-You can open a local .pml file by writing `file://` followed by the path to the `.pml`.
+You can open a local .pml file by writing `file://` followed by the path to the `.pml`.  
 Or you can connect to a WebServer by specifying it's host. The host can be ethier an `IP` or `localhost`.
 
 ## WebServer Usage
-To use the webserver you just have to put your `index.pml` file in the same folder as the server.\n
+To use the webserver you just have to put your `index.pml` file in the same folder as the server.  
 It's important it's name is exactly **index.pml** or it won't load. Images need to be specified inside the `img` folder.
 
 ## Targeted features are:
