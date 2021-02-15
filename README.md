@@ -26,19 +26,19 @@ It's important it's name is exactly **index.pml** or it won't load. Images need 
 
 The actual available tags are the following:
 
-**Background Color**
+**Background Color**  
 `<background R;G;B>` R, G, B going from 0 to 255.
 
-**Global Margin**
+**Global Margin**  
 `<magrin X;Y>` X, Y in px.
 
-**Text**
+**Text**  
 `<text Sample Text;X;Y>` X and Y are optional margin parameters.
 
-**Image**
+**Image**  
 `<img src;X;Y>` src is the path to the image, X and Y are optional margin parameters.
 
-**Newline**
+**Newline**  
 `<nl ;>`
 
 Check out `page.pml` in the browser folder to see an example.
