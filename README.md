@@ -8,7 +8,7 @@ You can open a local .pml file by writing `file://` followed by the path to the 
 Or you can connect to a WebServer by specifying it's host. The host can be ethier an `IP` or `localhost`.
 
 ## WebServer Usage
-To use the webserver you just have to put your `index.pml` file in the same folder as the server. 
+To use the webserver you just have to put your `index.pml` file in the same folder as the server.\n
 It's important it's name is exactly **index.pml** or it won't load. Images need to be specified inside the `img` folder.
 
 ## Targeted features are:
