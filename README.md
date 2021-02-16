@@ -1,6 +1,7 @@
 # ProBrws (Processing Browser and Web Server)
 This is a custom Browser and Web Server with it's own dedicated markup language called PML.
 
+## Getting started
 Check out the [wiki](https://github.com/plopez01/proBrws/wiki) on how to use any of the features, and the PML documentation.
 
 ## Targeted features are:
