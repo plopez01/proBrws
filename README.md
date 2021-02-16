@@ -13,7 +13,7 @@ It's important it's name is exactly **index.pml** or it won't load. Images need 
 
 ## Targeted features are:
 - ~~Load PML pages locally~~ | Done
-- ~~Load PML imges across the internet using the WebServer~~ | Done
+- ~~Load PML externally~~ | Done
 - Image transfer across the web | Almost done, there are some issues
 - Server CLI | Todo
 - Custom domain name system | Todo
