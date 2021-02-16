@@ -5,36 +5,52 @@ Server server;
 
 ByteBuffer buffer;
 
-int imgCount = 0;
-
 PImage[] images;
 
 byte[] serializedImages;
+
+String pmlFile = "./index.pml";
 
 void setup() {
   size (640, 480);
   background(0);
 
   server = new Server(this, 5204);  
-  byte[] bytes = loadBytes("./index.pml");
+  byte[] bytes = loadBytes(pmlFile);
 
   buffer = ByteBuffer.allocate(bytes.length + 4);
   buffer.putInt(bytes.length);
   buffer.put(bytes);
 
   File imgFolder = dataFile(sketchPath("/img"));
-  String[] imgNames = imgFolder.list();
-  imgCount = imgNames.length;
+  int imgCount = imgFolder.list().length;
 
+  String[] imgNames = getImageNames(imgCount);
+  
   images = new PImage[imgCount];
 
   for (int i = 0; i < imgCount; i++) {
-    images[i] = loadImage("./img/"+imgNames[i]);
+    images[i] = loadImage(imgNames[i]);
   }
-
+  
   serializedImages = serializeImages(images);
 }
 
+String[] getImageNames(int maxImg) {
+  String[] lines = loadStrings(pmlFile);
+  String[] imgNames = new String[maxImg];
+  int imgCount = 0;
+  for (int i = 0; i < lines.length; i++) {
+    String line = lines[i].split("<")[1];
+
+    String code = line.split(" ")[0];
+    String[] args = line.split(" ", 2)[1].split(">")[0].split(";");
+    if (code.equals("img")) {
+      imgNames[imgCount++] = args[0];
+    }
+  }
+  return imgNames;
+}
 
 void draw() {}
 
