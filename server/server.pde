@@ -22,41 +22,65 @@ void setup() {
   buffer.putInt(bytes.length);
   buffer.put(bytes);
 
-  File imgFolder = dataFile(sketchPath("/img"));
-  int imgCount = imgFolder.list().length;
+  String[] pmlData = loadStrings(pmlFile);;
 
-  String[] imgNames = getImageNames(imgCount);
+  int imgCount = getImgNum(pmlData);
+
+  String[] imgPaths = getImgPaths(imgCount);
   
   images = new PImage[imgCount];
 
   for (int i = 0; i < imgCount; i++) {
-    images[i] = loadImage(imgNames[i]);
+    images[i] = loadImage(imgPaths[i]);
   }
   
   serializedImages = serializeImages(images);
 }
 
-String[] getImageNames(int maxImg) {
+String[] getImgPaths(int maxImg) {
   String[] lines = loadStrings(pmlFile);
   String[] imgNames = new String[maxImg];
   int imgCount = 0;
+  int repImg = -1;
   for (int i = 0; i < lines.length; i++) {
     String line = lines[i].split("<")[1];
 
     String code = line.split(" ")[0];
     String[] args = line.split(" ", 2)[1].split(">")[0].split(";");
     if (code.equals("img")) {
-      imgNames[imgCount++] = args[0];
+      for(int z = 0; z < imgCount; z++){
+       if(imgNames[z].equals(args[0])){
+         repImg = z;
+         break;
+       }
+      }
+      if(repImg == -1){
+        imgNames[imgCount] = args[0];
+      }else{
+        imgNames[imgCount] = imgNames[repImg];
+        repImg = -1;
+      }
+      imgCount++;
     }
   }
   return imgNames;
+}
+
+int getImgNum(String[] lines){
+  int imgCount = 0;
+  for (int i = 0; i < lines.length; i++) {
+    if (lines[i].contains("img")) {
+      imgCount++;
+    }
+  }
+  return imgCount;
 }
 
 void draw() {}
 
 
 void serverEvent(Server extServer, Client extClient) {
-  println("A new client connected! Sending data length...");
+  println("A new client connected! Sending data...");
   server.write(buffer.array());
 }
 
