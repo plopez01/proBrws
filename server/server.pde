@@ -33,29 +33,36 @@ void setup() {
 
   serverCLI.info("Loaded from config!");
 
-  server = new Server(this, _PORT);  
-  byte[] bytes = loadBytes(pmlFile);
-  
+  if (_PORT > 1023 && _PORT < 65535) {
+    server = new Server(this, _PORT);  
+    byte[] bytes = loadBytes(pmlFile);
 
-  buffer = ByteBuffer.allocate(bytes.length + 4);
-  buffer.putInt(bytes.length);
-  buffer.put(bytes);
+    if (bytes != null) {
+      buffer = ByteBuffer.allocate(bytes.length + 4);
+      buffer.putInt(bytes.length);
+      buffer.put(bytes);
 
-  String[] pmlData = loadStrings(pmlFile);
-  
-  int imgCount = getImgNum(pmlData);
+      String[] pmlData = loadStrings(pmlFile);
 
-  String[] imgPaths = getImgPaths(pmlData, imgCount);
+      int imgCount = getImgNum(pmlData);
 
-  images = new PImage[imgCount];
+      String[] imgPaths = getImgPaths(pmlData, imgCount);
 
-  for (int i = 0; i < imgCount; i++) {
-    images[i] = loadImage(imgPaths[i]);
+      images = new PImage[imgCount];
+
+      for (int i = 0; i < imgCount; i++) {
+        images[i] = loadImage(imgPaths[i]);
+      }
+
+      serializedImages = serializeImages(images);
+
+      serverCLI.info("Server started, listening on port " + _PORT + "...");
+    } else {
+      serverCLI.error("The file \"" + pmlFile + "\" is missing or inaccessible. Make sure you specified it correctly\nin the config.json.");
+    }
+  } else {
+    serverCLI.error("The set port " + _PORT + " is invalid. The valid port range is 1024-65535.");
   }
-
-  serializedImages = serializeImages(images);
-
-  serverCLI.info("Server started, listening on port " + _PORT + "...");
 }
 
 void draw() {
