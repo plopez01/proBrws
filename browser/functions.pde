@@ -20,8 +20,9 @@ void search(String host) {
     
     Client client = new Client(this, host, 5204);
     
-    byte[] checkSum = client.readBytes();
     blockUntilDone(client); // Block thread until we got all the data
+    byte[] checkSum = client.readBytes();
+    
     
     if (cacheChecksum != null && cache) {
       boolean invalidCache = false;
