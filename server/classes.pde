@@ -1,6 +1,7 @@
 class ServerCLI {
   String data = "";
   int textSize, xoffset, yoffset;
+  boolean exitOnPress = false;
   ServerCLI(int textSize, int xoffset, int yoffset){
     this.textSize = textSize;
     this.xoffset = xoffset;
@@ -35,6 +36,11 @@ class ServerCLI {
     data += "[ERROR] " + text + "\n";
   }
   
+  void waitForExit(){
+    data += "\n[INPUT] Press any key to exit...\n";
+    exitOnPress = true;
+  }
+  
   private void setColor(String id){
     switch(id){
       case "[INFO":
@@ -49,6 +55,8 @@ class ServerCLI {
       case "[START":
         fill(0, 255, 102);
         break;
+      case "[INPUT":
+        fill(0, 135, 255);
     }
   }
 }

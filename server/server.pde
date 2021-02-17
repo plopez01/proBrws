@@ -59,12 +59,16 @@ void setup() {
       serverCLI.info("Server started, listening on port " + _PORT + "...");
     } else {
       serverCLI.error("The file \"" + pmlFile + "\" is missing or inaccessible. Make sure you specified it correctly\nin the config.json.");
+      serverCLI.waitForExit();
     }
   } else {
     serverCLI.error("The set port " + _PORT + " is invalid. The valid port range is 1024-65535.");
+    serverCLI.waitForExit();
   }
 }
 
 void draw() {
+  if(serverCLI.exitOnPress && keyPressed) exit();
+  
   serverCLI.render();
 }
