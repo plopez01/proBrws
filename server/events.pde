@@ -1,9 +1,9 @@
 void serverEvent(Server extServer, Client extClient) {
-  println("A new client connected! Sending checksum...");
+  serverCLI.info("[" + extClient.ip() + "] A new client has connected, sending checksum...");
   try{
     server.write(createChecksum(pmlFile));
   } catch (Exception e){
-    println(e);
+    serverCLI.error(e.getMessage());
     server.write(new byte[0]);
   }
 }
@@ -13,9 +13,11 @@ void clientEvent(Client someClient) {
   switch(dataIn) {
   case 0: //PML transfer
     server.write(buffer.array());
+    serverCLI.info("[" + someClient.ip() + "] Client requested PML, sending...");
     break;
   case 1: //Image transfer
     server.write(serializedImages);
+    serverCLI.info("[" + someClient.ip() + "] Client requested Images, sending...");
     break;
   }
 }

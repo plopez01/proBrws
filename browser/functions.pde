@@ -19,9 +19,9 @@ void search(String host) {
     byte[] cacheChecksum = loadBytes("./cache/"+host+"/sum.md5");
     
     Client client = new Client(this, host, 5204);
-    blockUntilDone(client); // Block thread until we got all the data
     
     byte[] checkSum = client.readBytes();
+    blockUntilDone(client); // Block thread until we got all the data
     
     if (cacheChecksum != null && cache) {
       boolean invalidCache = false;
