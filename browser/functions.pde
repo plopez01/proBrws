@@ -46,7 +46,7 @@ void search(String host) {
           for (int i = 0; i < imgCount; i++) {
             imgBuffer[i] = loadImage("./cache/"+host+"/img/"+i+".tif");
           }
-          print("Cache loaded.");
+          println("Cache loaded.");
         }else{
            // Download page from because there is no cache
            println("There is no cache, downloading from server");

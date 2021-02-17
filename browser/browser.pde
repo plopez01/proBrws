@@ -1,7 +1,7 @@
 import processing.net.*;
 import java.nio.ByteBuffer;
 
-boolean cache = false;
+boolean cache = true;
 
 String[] buffer;
 
