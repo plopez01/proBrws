@@ -19,6 +19,10 @@ class ServerCLI {
     }
   }
   
+  void init(String text){
+    data += "[START] " + text + "\n";
+  }
+  
   void info(String text){
     data += "[INFO] " + text + "\n";
   }
@@ -41,6 +45,9 @@ class ServerCLI {
         break;
       case "[ERROR":
         fill(255, 0, 51);
+        break;
+      case "[START":
+        fill(0, 255, 102);
         break;
     }
   }

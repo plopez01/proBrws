@@ -50,17 +50,17 @@ void search(String host) {
           println("Cache loaded.");
         }else{
            // Download page from because there is no cache
-           println("There is no cache, downloading from server");
+           println("There is no cache, downloading from server...");
            downloadPage(host, client, checkSum); 
         }
       }else{
         // Download page from server because the checksum is no the same anymore
-        println("The cache is invalid, downloading from server");
+        println("The cache is invalid, downloading from server...");
         downloadPage(host, client, checkSum);
       }
     } else {
       // Download page from server becouse there is no checksum in the cache or it has been disabled
-      println("There is no checksum or cache has been disabled, downloading from server");
+      println("There is no checksum or cache has been disabled, downloading from server...");
       downloadPage(host, client, checkSum);
     }
   }

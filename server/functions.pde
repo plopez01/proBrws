@@ -58,6 +58,14 @@ byte[] serializeImages(PImage[] img) {
   return bb.array();
 }
 
+String[] resolveJSONArray(JSONArray array) {
+  String[] result = new String[array.size()];
+  for (int i = 0; i < array.size(); i++) {
+    result[i] = array.getString(i);
+  }
+  return result;
+}
+
 // https://www.rgagnon.com/javadetails/java-0416.html
 byte[] createChecksum(String filename) throws Exception {
   InputStream fis =  createInput(filename);
