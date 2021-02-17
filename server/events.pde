@@ -1,5 +1,12 @@
 void serverEvent(Server extServer, Client extClient) {
+  if(isBlacklisted(extClient.ip())){
+    serverCLI.warn("[" + extClient.ip() + "] IP is blacklisted, preventing connection.");
+    server.write(new byte[] {-1});
+    return;
+  }
+  
   serverCLI.info("[" + extClient.ip() + "] A new client has connected, sending checksum...");
+  
   try{
     server.write(createChecksum(pmlFile));
   } catch (Exception e){
@@ -9,6 +16,12 @@ void serverEvent(Server extServer, Client extClient) {
 }
 
 void clientEvent(Client someClient) {
+  if(isBlacklisted(someClient.ip())){
+    serverCLI.warn("[" + someClient.ip() + "] IP is blacklisted, preventing connection.");
+    server.write(new byte[] {-1});
+    return;
+  }
+  
   int dataIn = someClient.read();
   switch(dataIn) {
   case 0: //PML transfer

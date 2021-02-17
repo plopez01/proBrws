@@ -56,7 +56,7 @@ class ServerCLI {
         fill(0, 255, 102);
         break;
       case "[INPUT":
-        fill(0, 135, 255);
+        fill(192, 192, 192);
     }
   }
 }

@@ -66,6 +66,13 @@ String[] resolveJSONArray(JSONArray array) {
   return result;
 }
 
+boolean isBlacklisted(String ip){
+  for(int i = 0; i < blacklist.length; i++){
+    if(ip.equals(blacklist[i])) return true;
+  }
+  return false;
+}
+
 // https://www.rgagnon.com/javadetails/java-0416.html
 byte[] createChecksum(String filename) throws Exception {
   InputStream fis =  createInput(filename);

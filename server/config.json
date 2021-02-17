@@ -1,7 +1,7 @@
 {
     "port": 5204,
-    "main": "indexs.pml",
+    "main": "index.pml",
     "blacklist": [
-
+        
     ]
 }

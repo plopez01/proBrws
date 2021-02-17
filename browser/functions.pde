@@ -17,43 +17,47 @@ void search(String host) {
     // Load from cache
     local = false;
     byte[] cacheChecksum = loadBytes("./cache/"+host+"/sum.md5");
-    
+
     Client client = new Client(this, host, 5204);
-    
+
     blockUntilDone(client); // Block thread until we got all the data
     byte[] checkSum = client.readBytes();
-    
-    
+
+    if (checkSum[0] == -1) {
+      println("Connection couldn't be made!");
+      return;
+    }
+
     if (cacheChecksum != null && cache) {
       boolean invalidCache = false;
-      
+
       // Validate cache using checksum
-      for(int i = 0; i < checkSum.length; i++){
-        if(checkSum[i] != cacheChecksum[i]){
+      for (int i = 0; i < checkSum.length; i++) {
+        if (checkSum[i] != cacheChecksum[i]) {
           invalidCache = true;
         }
       }
-      if(!invalidCache){
-       println("Loading from cache!");
-       String[] cacheRead = loadStrings("./cache/"+host+"/index.pml");
-       if(cacheRead != null){
+      if (!invalidCache) {
+        println("Loading from cache!");
+        String[] cacheRead = loadStrings("./cache/"+host+"/index.pml");
+        if (cacheRead != null) {
           buffer = cacheRead;
-      
+
           File imgFolder = dataFile(sketchPath("./cache/"+host+"/img"));
           int imgCount = imgFolder.list().length;
-          
+
           imgBuffer = new PImage[imgCount];
-          
+
           for (int i = 0; i < imgCount; i++) {
             imgBuffer[i] = loadImage("./cache/"+host+"/img/"+i+".tif");
           }
           println("Cache loaded.");
-        }else{
-           // Download page from because there is no cache
-           println("There is no cache, downloading from server...");
-           downloadPage(host, client, checkSum); 
+        } else {
+          // Download page from because there is no cache
+          println("There is no cache, downloading from server...");
+          downloadPage(host, client, checkSum);
         }
-      }else{
+      } else {
         // Download page from server because the checksum is no the same anymore
         println("The cache is invalid, downloading from server...");
         downloadPage(host, client, checkSum);
@@ -117,7 +121,7 @@ void renderPage(String[] lines) {
 
 void downloadPage(String host, Client client, byte[] checksum) {
   saveBytes("./cache/"+host+"/sum.md5", checksum); // Save cache checksum
-  
+
   //Get page markup file
   client.write(0);
   blockUntilDone(client);
