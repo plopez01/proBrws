@@ -26,6 +26,8 @@ void setup() {
   background(255);
 
   navBar.text = "file://page.pml";
+  
+  println("Browser started!");
 }
 
 void draw() {

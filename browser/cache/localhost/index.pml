@@ -4,6 +4,4 @@
 <img ./img/robux.jpg>
 <img ./img/robux.jpg>
 <img ./img/robux.jpg>
-<img ./img/robux.jpg>
-<img ./img/robux.jpg>
 <text SANS UNDERTALE;200;0>

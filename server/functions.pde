@@ -8,15 +8,15 @@ String[] getImgPaths(String[] lines, int maxImg) {
     String code = line.split(" ")[0];
     String[] args = line.split(" ", 2)[1].split(">")[0].split(";");
     if (code.equals("img")) {
-      for(int z = 0; z < imgCount; z++){
-       if(imgNames[z].equals(args[0])){
-         repImg = z;
-         break;
-       }
+      for (int z = 0; z < imgCount; z++) {
+        if (imgNames[z].equals(args[0])) {
+          repImg = z;
+          break;
+        }
       }
-      if(repImg == -1){
+      if (repImg == -1) {
         imgNames[imgCount] = args[0];
-      }else{
+      } else {
         imgNames[imgCount] = imgNames[repImg];
         repImg = -1;
       }
@@ -26,7 +26,7 @@ String[] getImgPaths(String[] lines, int maxImg) {
   return imgNames;
 }
 
-int getImgNum(String[] lines){
+int getImgNum(String[] lines) {
   int imgCount = 0;
   for (int i = 0; i < lines.length; i++) {
     if (lines[i].contains("img")) {
@@ -56,4 +56,23 @@ byte[] serializeImages(PImage[] img) {
     }
   }
   return bb.array();
+}
+
+// https://www.rgagnon.com/javadetails/java-0416.html
+byte[] createChecksum(String filename) throws Exception {
+  InputStream fis =  createInput(filename);
+
+  byte[] buffer = new byte[1024];
+  MessageDigest complete = MessageDigest.getInstance("MD5");
+  int numRead;
+
+  do {
+    numRead = fis.read(buffer);
+    if (numRead > 0) {
+      complete.update(buffer, 0, numRead);
+    }
+  } while (numRead != -1);
+
+  fis.close();
+  return complete.digest();
 }

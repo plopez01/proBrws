@@ -12,23 +12,55 @@ void search(String host) {
     //Load fom local
     buffer = loadStrings(localSearch[1]);
     local = true;
+    println("Loading from local pml!");
   } else {
     // Load from cache
-    String[] cacheRead = loadStrings("./cache/"+host+"/index.pml");
-    if (cacheRead != null && cache) {
-      buffer = cacheRead;
+    local = false;
+    byte[] cacheChecksum = loadBytes("./cache/"+host+"/sum.md5");
+    
+    Client client = new Client(this, host, 5204);
+    blockUntilDone(client); // Block thread until we got all the data
+    
+    byte[] checkSum = client.readBytes();
+    
+    if (cacheChecksum != null && cache) {
+      boolean invalidCache = false;
       
-      File imgFolder = dataFile(sketchPath("./cache/"+host+"/img"));
-      int imgCount = imgFolder.list().length;
+      // Validate cache using checksum
+      for(int i = 0; i < checkSum.length; i++){
+        if(checkSum[i] != cacheChecksum[i]){
+          invalidCache = true;
+        }
+      }
+      if(!invalidCache){
+       println("Loading from cache!");
+       String[] cacheRead = loadStrings("./cache/"+host+"/index.pml");
+       if(cacheRead != null){
+          buffer = cacheRead;
       
-      imgBuffer = new PImage[imgCount];
-      
-      for (int i = 0; i < imgCount; i++) {
-        imgBuffer[i] = loadImage("./cache/"+host+"/img/"+i+".tif");
+          File imgFolder = dataFile(sketchPath("./cache/"+host+"/img"));
+          int imgCount = imgFolder.list().length;
+          
+          imgBuffer = new PImage[imgCount];
+          
+          for (int i = 0; i < imgCount; i++) {
+            imgBuffer[i] = loadImage("./cache/"+host+"/img/"+i+".tif");
+          }
+          print("Cache loaded.");
+        }else{
+           // Download page from because there is no cache
+           println("There is no cache, downloading from server");
+           downloadPage(host, client, checkSum); 
+        }
+      }else{
+        // Download page from server because the checksum is no the same anymore
+        println("The cache is invalid, downloading from server");
+        downloadPage(host, client, checkSum);
       }
     } else {
-      // Download page from server
-      downloadPage(host);
+      // Download page from server becouse there is no checksum in the cache or it has been disabled
+      println("There is no checksum or cache has been disabled, downloading from server");
+      downloadPage(host, client, checkSum);
     }
   }
   render = true;
@@ -82,15 +114,15 @@ void renderPage(String[] lines) {
   MARGINY = 2;
 }
 
-void downloadPage(String host) {
-  Client client = new Client(this, host, 5204);
-  blockUntilDone(client); // Block thread until we got all the data
-
+void downloadPage(String host, Client client, byte[] checksum) {
+  saveBytes("./cache/"+host+"/sum.md5", checksum); // Save cache checksum
+  
   //Get page markup file
+  client.write(0);
+  blockUntilDone(client);
   ByteBuffer bb = ByteBuffer.wrap(client.readBytes());
   int len = bb.getInt();
   byte[] bBuffer = new byte[len];
-  //TODO: Implement rsc data
   bb.get(bBuffer);
   String decodedData = "";
   for (int i = 0; i < len; i++) {
@@ -99,7 +131,7 @@ void downloadPage(String host) {
   buffer = decodedData.split("\n");
 
   //Get images
-  client.write(0);
+  client.write(1);
   blockUntilDone(client);
   imgBuffer = deserializeImages(client);
 
@@ -128,7 +160,6 @@ PImage[] deserializeImages(Client client) {
   int imgNum = bb.getInt();
   PImage[] imgs = new PImage[imgNum];
   for (int x = 0; x < imgNum; x++) {
-    println(x);
     int w = bb.getInt();
     int h = bb.getInt();
     PImage img = new PImage(w, h);
@@ -141,7 +172,6 @@ PImage[] deserializeImages(Client client) {
       }
     }
     img.updatePixels();
-    println(img.pixels.length);
     imgs[x] = img;
   }
   return imgs;

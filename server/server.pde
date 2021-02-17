@@ -1,5 +1,6 @@
 import processing.net.*;
 import java.nio.ByteBuffer;
+import java.security.MessageDigest;
 
 Server server;
 
@@ -35,6 +36,8 @@ void setup() {
   }
   
   serializedImages = serializeImages(images);
+  
+  println("Server started...");
 }
 
 void draw() {}
