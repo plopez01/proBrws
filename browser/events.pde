@@ -8,6 +8,11 @@ void mouseClicked() {
 
 void keyPressed() {
   if (navBar.focus) {
+    if(key == ''){ // I know, this is like the most hackiest thing ever and idk if will work in other os than windows. Let's just leave it for now ;)
+      //Ctrl-v
+      navBar.text += GetTextFromClipboard();
+      return;
+    }
     switch(keyCode) {
     case 8:
       if (navBar.text.length() != 0) {

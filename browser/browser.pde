@@ -1,5 +1,9 @@
 import processing.net.*;
 import java.nio.ByteBuffer;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 
 boolean cache = true;
 
