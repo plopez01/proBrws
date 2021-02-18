@@ -25,13 +25,18 @@ void setup() {
   serverCLI.init("proBrws Web Server  v0.1.0");
 
   // Load config
-  JSONObject config = loadJSONObject("config.json");
+  JSONObject config;
 
-  _PORT = config.getInt("port");
-  pmlFile = config.getString("main");
-  blacklist = resolveJSONArray(config.getJSONArray("blacklist"));
-
-  serverCLI.info("Loaded from config!");
+  try{
+    config = loadJSONObject("config.json");
+    _PORT = config.getInt("port");
+    pmlFile = config.getString("main");
+    blacklist = resolveJSONArray(config.getJSONArray("blacklist"));
+    
+    serverCLI.info("Loaded from config!");
+  } catch (RuntimeException e){
+    serverCLI.warn("config.json is not a valid json, using default config.");
+  }
 
   if (_PORT > 1023 && _PORT < 65535) {
     server = new Server(this, _PORT);  
