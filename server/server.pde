@@ -20,6 +20,8 @@ String pmlFile = "./index.pml";
 
 int _PORT = 5204;
 
+String _VERSION = "0.1.0";
+
 String[] blacklist;
 
 void setup() {
@@ -28,7 +30,7 @@ void setup() {
   noSmooth();
   serverCLI.begin();
   
-  serverCLI.init("proBrws Web Server  v0.1.0");
+  serverCLI.init("proBrws Web Server  v"+_VERSION);
 
   // Load config
   JSONObject config;

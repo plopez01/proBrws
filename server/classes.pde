@@ -56,9 +56,34 @@ class ServerCLI {
 
   private void handleCMD(String text) {
     String[] cmd = text.split(" ");
-    switch(cmd[0]){
+    switch(cmd[0].toLowerCase()){
+      case "help":
+        info("The available commands are: help, version, port, blacklist.");
+        break;
+      case "version":
+        info(_VERSION);
+        break;
+      case "port":
+        info(str(_PORT));
+        break;
+      case "blacklist":
+        String result = "The blacklisted IP's are: \n";
+        if(blacklist.length > 0){
+          for(int i = 0; i < blacklist.length; i++){
+           result += blacklist[i];
+           if(i % 6 == 0 && i != 0){
+              result += "\n"; 
+           }else{
+             result += " ";
+           }
+          }
+        }else{
+          result = "There are no blacklisted IP's.";
+        }
+        info(result);
+        break;
       default:
-        error("Command not found.");
+        error("Command not found, use \"help\" to see a list of available commands.");
       break;
     }
   }
@@ -81,7 +106,7 @@ class ServerCLI {
       fill(192, 192, 192);
       break;
     case "[>":
-      fill(255);
+      fill(200);
       break;
     }
   }
