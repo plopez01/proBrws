@@ -8,7 +8,7 @@ Check out the [wiki](https://github.com/plopez01/proBrws/wiki) on how to use any
 - ~~Load PML pages locally~~ | Done
 - ~~Load PML externally~~ | Done
 - Image transfer across the web | Done but needs optimization. Check out [#6](https://github.com/plopez01/proBrws/issues/6).
-- Server CLI | Working on...
+- Server CLI | Done
 - Custom domain name system | Todo
 
 ### *Maybe I implement these:*
