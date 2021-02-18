@@ -34,3 +34,21 @@ void clientEvent(Client someClient) {
     break;
   }
 }
+
+void keyPressed() {
+  switch(keyCode) {
+  case 8:
+    if (serverCLI.inputBox.text.length() != 0) {
+      serverCLI.inputBox.text = serverCLI.inputBox.text.substring(0, serverCLI.inputBox.text.length()-1);
+    }
+    break;
+
+  case 10:
+    serverCLI.cmd();
+    break;
+
+  default:
+    if (keyCode > 31) serverCLI.inputBox.text += key;
+    break;
+  }
+}

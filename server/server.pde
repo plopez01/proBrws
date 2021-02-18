@@ -22,6 +22,8 @@ void setup() {
   size (640, 480);
   background(0);
   noSmooth();
+  serverCLI.begin();
+  
   serverCLI.init("proBrws Web Server  v0.1.0");
 
   // Load config
