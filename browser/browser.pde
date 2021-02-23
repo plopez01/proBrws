@@ -25,11 +25,13 @@ int MARGINX = 2;
 
 int MARGINY = 2;
 
+String URI = "";
+
 void setup() {
   size(640, 480);
   background(255);
 
-  navBar.text = "file://page.pml";
+  navBar.text = "";
   
   println("Browser started!");
 }

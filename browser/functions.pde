@@ -11,6 +11,8 @@ void search(String host) {
   if (localSearch.length == 2) {
     //Load fom local
     buffer = loadStrings(localSearch[1]);
+    String[] dirs = localSearch[1].split("/");
+    URI = localSearch[1].split(dirs[dirs.length-1])[0];
     local = true;
     println("Loading from local pml!");
   } else {
@@ -91,22 +93,25 @@ void renderPage(String[] lines) {
       }
       if (code.equals("img")) {
         if (local) {
-          PImage lImage = loadImage(args[0]);
+          PImage lImage = loadImage(URI+"/"+args[0]);
           if (args.length == 2) {
             image(lImage, MARGINX, MARGINY+HEIGHT, lImage.width*parseFloat(args[1]), lImage.height*parseFloat(args[1]));
+            HEIGHT += lImage.height*parseFloat(args[1]);
           } else {
             image(lImage, MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, lImage.width*parseFloat(args[3]), lImage.height*parseFloat(args[3]));
+            HEIGHT += lImage.height*parseFloat(args[3]);
           }
         } else {
           if (args.length == 2) {
             image(imgBuffer[imgCounter], MARGINX, MARGINY+HEIGHT, imgBuffer[imgCounter].width*parseFloat(args[1]), imgBuffer[imgCounter].height*parseFloat(args[1]));
+            HEIGHT += imgBuffer[imgCounter].height*parseFloat(args[1]);
           } else {
             // Wow, this is long... should probably make shorter somehow.
             image(imgBuffer[imgCounter], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, imgBuffer[imgCounter].width*parseFloat(args[3]), imgBuffer[imgCounter].height*parseFloat(args[3]));
+            HEIGHT += imgBuffer[imgCounter].height*parseFloat(args[3]);
           }
         }
         imgCounter++;
-        HEIGHT += 140;
       }
       if (code.equals("nl")) {
         HEIGHT += 20;
@@ -118,7 +123,7 @@ void renderPage(String[] lines) {
     }
   }
   catch(Exception e) {
-    println("An error has ocurred, check your PML code: " + e);
+    //println("An error has ocurred, check your PML code: " + e); //YES
   }
   HEIGHT = 50;
   MARGINX = 2;

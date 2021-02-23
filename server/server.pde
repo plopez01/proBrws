@@ -62,9 +62,12 @@ void setup() {
       String[] imgPaths = getImgPaths(pmlData, imgCount);
 
       images = new PImage[imgCount];
-
+      
+      String[] dirs = pmlFile.split("/");
+      String URI = pmlFile.split(dirs[dirs.length-1])[0];
+      
       for (int i = 0; i < imgCount; i++) {
-        images[i] = loadImage(imgPaths[i]);
+        images[i] = loadImage(URI+"/"+imgPaths[i]);
       }
 
       serializedImages = serializeImages(images);
