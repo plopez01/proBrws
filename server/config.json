@@ -1,6 +1,6 @@
 {
     "port": 5204,
-    "main": "examples/index.pml",
+    "main": "index.pml",
     "blacklist": [
 
     ]
