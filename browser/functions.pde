@@ -91,16 +91,18 @@ void renderPage(String[] lines) {
       }
       if (code.equals("img")) {
         if (local) {
-          if (args.length == 1) {
-            image(loadImage(args[0]), MARGINX, MARGINY+HEIGHT, 100, 140);
+          PImage lImage = loadImage(args[0]);
+          if (args.length == 2) {
+            image(lImage, MARGINX, MARGINY+HEIGHT, lImage.width*parseFloat(args[1]), lImage.height*parseFloat(args[1]));
           } else {
-            image(loadImage(args[0]), MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, 100, 140);
+            image(lImage, MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, lImage.width*parseFloat(args[3]), lImage.height*parseFloat(args[3]));
           }
         } else {
-          if (args.length == 1) {
-            image(imgBuffer[imgCounter], MARGINX, MARGINY+HEIGHT, 100, 140);
+          if (args.length == 2) {
+            image(imgBuffer[imgCounter], MARGINX, MARGINY+HEIGHT, imgBuffer[imgCounter].width*parseFloat(args[1]), imgBuffer[imgCounter].height*parseFloat(args[1]));
           } else {
-            image(imgBuffer[imgCounter], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, 100, 140);
+            // Wow, this is long... should probably make shorter somehow.
+            image(imgBuffer[imgCounter], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, imgBuffer[imgCounter].width*parseFloat(args[3]), imgBuffer[imgCounter].height*parseFloat(args[3]));
           }
         }
         imgCounter++;
