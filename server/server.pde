@@ -64,7 +64,11 @@ void setup() {
       images = new PImage[imgCount];
       
       String[] dirs = pmlFile.split("/");
-      String URI = pmlFile.split(dirs[dirs.length-1])[0];
+      String URI = "";
+      
+      if(dirs.length > 1){
+        URI = pmlFile.split(dirs[dirs.length-1])[0];
+      }
       
       for (int i = 0; i < imgCount; i++) {
         images[i] = loadImage(URI+"/"+imgPaths[i]);
