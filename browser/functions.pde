@@ -73,46 +73,50 @@ void search(String host) {
 
 void renderPage(String[] lines) {
   int imgCounter = 0;
+  try {
+    for (int i = 0; i < lines.length; i++) {
+      String line = lines[i].split("<")[1];
 
-  for (int i = 0; i < lines.length; i++) {
-    String line = lines[i].split("<")[1];
-
-    String code = line.split(" ")[0];
-    String[] args = line.split(" ", 2)[1].split(">")[0].split(";");
-    if (code.equals("background")) {
-      background(parseInt(args[0]), parseInt(args[1]), parseInt(args[2]));
-    }
-    if (code.equals("text")) {
-      if (args.length == 1) {
-        text(args[0], MARGINX, MARGINY+HEIGHT);
-      } else {
-        text(args[0], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT);
+      String code = line.split(" ")[0];
+      String[] args = line.split(" ", 2)[1].split(">")[0].split(";");
+      if (code.equals("background")) {
+        background(parseInt(args[0]), parseInt(args[1]), parseInt(args[2]));
       }
-    }
-    if (code.equals("img")) {
-      if (local) {
+      if (code.equals("text")) {
         if (args.length == 1) {
-          image(loadImage(args[0]), MARGINX, MARGINY+HEIGHT, 100, 140);
+          text(args[0], MARGINX, MARGINY+HEIGHT);
         } else {
-          image(loadImage(args[0]), MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, 100, 140);
-        }
-      } else {
-        if (args.length == 1) {
-          image(imgBuffer[imgCounter], MARGINX, MARGINY+HEIGHT, 100, 140);
-        } else {
-          image(imgBuffer[imgCounter], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, 100, 140);
+          text(args[0], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT);
         }
       }
-      imgCounter++;
-      HEIGHT += 140;
+      if (code.equals("img")) {
+        if (local) {
+          if (args.length == 1) {
+            image(loadImage(args[0]), MARGINX, MARGINY+HEIGHT, 100, 140);
+          } else {
+            image(loadImage(args[0]), MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, 100, 140);
+          }
+        } else {
+          if (args.length == 1) {
+            image(imgBuffer[imgCounter], MARGINX, MARGINY+HEIGHT, 100, 140);
+          } else {
+            image(imgBuffer[imgCounter], MARGINX+parseInt(args[1]), MARGINY+parseInt(args[2])+HEIGHT, 100, 140);
+          }
+        }
+        imgCounter++;
+        HEIGHT += 140;
+      }
+      if (code.equals("nl")) {
+        HEIGHT += 20;
+      }
+      if (code.equals("margin")) {
+        MARGINX = parseInt(args[0]);
+        MARGINY = parseInt(args[1]);
+      }
     }
-    if (code.equals("nl")) {
-      HEIGHT += 20;
-    }
-    if (code.equals("margin")) {
-      MARGINX = parseInt(args[0]);
-      MARGINY = parseInt(args[1]);
-    }
+  }
+  catch(Exception e) {
+    println("An error has ocurred, check your PML code: " + e);
   }
   HEIGHT = 50;
   MARGINX = 2;
@@ -189,14 +193,14 @@ String GetTextFromClipboard () {
     return "";
   return text;
 }
- 
+
 Object GetFromClipboard (DataFlavor flavor) {
- 
+
   Clipboard clipboard = getJFrame(getSurface()).getToolkit().getSystemClipboard();
- 
+
   Transferable contents = clipboard.getContents(null);
   Object object = null; // the potential result 
- 
+
   if (contents != null && contents.isDataFlavorSupported(flavor)) {
     try
     {
@@ -215,7 +219,7 @@ Object GetFromClipboard (DataFlavor flavor) {
   }
   return object;
 } 
- 
+
 static final javax.swing.JFrame getJFrame(final PSurface surf) {
   return
     (javax.swing.JFrame)

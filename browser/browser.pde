@@ -29,7 +29,7 @@ void setup() {
   size(640, 480);
   background(255);
 
-  navBar.text = "localhost";
+  navBar.text = "file://page.pml";
   
   println("Browser started!");
 }
