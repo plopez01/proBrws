@@ -58,7 +58,7 @@ class ServerCLI {
     String[] cmd = text.split(" ");
     switch(cmd[0].toLowerCase()){
       case "help":
-        info("The available commands are: help, version, port, blacklist.");
+        info("The available commands are: help, version, port, blacklist, stop.");
         break;
       case "version":
         info(_VERSION);
@@ -81,6 +81,9 @@ class ServerCLI {
           result = "There are no blacklisted IP's.";
         }
         info(result);
+        break;
+      case "stop":
+        exit();
         break;
       default:
         error("Command not found, use \"help\" to see a list of available commands.");
