@@ -17,6 +17,7 @@ PImage[] images;
 byte[] serializedImages;
 
 String pmlFile = "./index.pml";
+byte[] checkSum;
 
 int _PORT = 5204;
 
@@ -68,7 +69,14 @@ void setup() {
       }
       
       serializedImages = serializeImages(images);
-
+      try {
+        checkSum = createChecksum(pmlFile);
+      } 
+      catch (Exception e) {
+        serverCLI.error(e.getMessage());
+        serverCLI.waitForExit();
+      }
+      
       serverCLI.info("Server started, listening on port " + _PORT + "...");
     } else {
       serverCLI.error("The file \"" + pmlFile + "\" is missing or inaccessible. Make sure you specified it correctly\nin the config.json.");

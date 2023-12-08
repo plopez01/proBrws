@@ -7,13 +7,8 @@ void serverEvent(Server extServer, Client extClient) {
 
   serverCLI.info("[" + extClient.ip() + "] A new client has connected, sending checksum...");
 
-  try {
-    server.write(createChecksum(pmlFile));
-  } 
-  catch (Exception e) {
-    serverCLI.error(e.getMessage());
-    server.write(new byte[0]);
-  }
+  server.write(checkSum);
+
 }
 
 void clientEvent(Client someClient) {
