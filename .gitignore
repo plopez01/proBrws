@@ -1,5 +1,7 @@
 browser/out
 server/out
 
+browser/cache
+
 browser/.vscode
 server/.vscode

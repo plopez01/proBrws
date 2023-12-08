@@ -6,7 +6,19 @@ void blockUntilDone(Client client) {
   }
 }
 
+String resolveHostname(String hostname){
+  try {
+    InetAddress address = InetAddress.getByName(hostname); 
+    return address.getHostAddress();
+  } catch (UnknownHostException e){
+    e.printStackTrace();
+  }
+  return hostname;
+}
+
 void search(String host) {
+  String hostnameRegex = "(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]";
+  if (host.matches(hostnameRegex)) host = resolveHostname(host);
   String[] localSearch = host.split("file://");
   if (localSearch.length == 2) {
     //Load fom local
@@ -160,7 +172,7 @@ void downloadPage(String host, Client client, byte[] checksum) {
 
   //Save images to the cache
   for (int i = 0; i < imgBuffer.length; i++) {
-    imgBuffer[i].save(savePath("./cache/"+host+"/img/"+i));
+    imgBuffer[i].save(savePath("./cache/"+host+"/img/"+i+".tif"));
   }
 
   //Stop connection
