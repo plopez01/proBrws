@@ -9,7 +9,7 @@ Check out the [wiki](https://github.com/plopez01/proBrws/wiki) on how to use any
 - ~~Load PML externally~~ | Done
 - ~~Image transfer across the web~~ | Done but needs optimization. Check out [#6](https://github.com/plopez01/proBrws/issues/6).
 - ~~Server CLI~~ | Done
-- Custom domain name system | Todo
+- ~~Hostname resolution~~ | Done
 
 ### *Maybe I implement these:*
 - Browser multi tab system
